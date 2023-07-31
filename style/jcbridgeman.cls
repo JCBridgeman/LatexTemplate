@@ -4,8 +4,6 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{jcbridgeman}[2023/07/31 jcbridgeman LaTeX class]
-
-
 \RequirePackage{kvoptions}
 \RequirePackage{xcolor}
 \RequirePackage{etoolbox}
@@ -29,8 +27,14 @@
 \DeclareOption{onecolumn}{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
 \DeclareOption{twocolumn}{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
 
-\DeclareOption{letterpaper}{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
-\DeclareOption{a4paper}{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
+\DeclareOption{letterpaper}{
+	\PassOptionsToPackage{letterpaper,centering,hmargin=2cm,vmargin=2cm}{geometry}
+	\PassOptionsToClass{\CurrentOption}{revtex4-2}
+	}
+\DeclareOption{a4paper}{
+	\PassOptionsToPackage{a4paper,centering,hmargin=2cm,vmargin=2cm}{geometry}
+	\PassOptionsToClass{\CurrentOption}{revtex4-2}
+	}
 
 \DeclareOption{prl}{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
 \DeclareOption{prb}{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
@@ -137,7 +141,7 @@
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{revtex4-2}}
 
-\ExecuteOptions{a4paper,onecolumn,prb}
+\ExecuteOptions{a4paper,reprint,onecolumn,prb}
 
 \ProcessOptions\relax
 \ProcessKeyvalOptions*
@@ -152,6 +156,7 @@
 \RequirePackage{adjustbox,soul,diagbox,cancel,hhline}
 \RequirePackage{changes}
 \RequirePackage{outlines,changepage,ftnxtra}
+\RequirePackage{geometry}
 
 % Some tweaks to revtex
 \makeatletter
