@@ -1,0 +1,49 @@
+%This line sets the project root file.
+% !TEX root = main.tex
+% !TEX spellcheck = en_US
+%------------------------------------------------------------------------------------------------------------%
+\makeatletter
+\def\input@path{{./style}}
+\makeatother
+%------------------------------------------------------------------------------------------------------------%
+\documentclass[authorcodes={}]{jcbridgeman}
+
+\include{style/macros}
+
+%%------------------------------------------------------------------------------------------------------------%
+
+\begin{document}
+%
+\title{Template Document}
+%
+\author{Jacob C.\ Bridgeman}
+\email{jcbridgeman1@gmail.com}
+\homepage{jcbridgeman.github.io}
+\orcid{0000-0002-5638-6681}
+\affiliation{Department of Physics and Astronomy, Ghent University, Krijgslaan 281, S9, B-9000 Ghent, Belgium}
+%
+\date{\today}
+%
+\begin{abstract}
+\end{abstract}
+%
+\maketitle
+%
+\tableofcontents
+%
+\input{sections/body/introduction}
+%%
+\input{sections/body/preliminaries}
+%%
+\input{sections/body/remarks}
+%
+\acknowledgments
+JB~was funded by the Research Foundation\textendash Flanders via postdoctoral fellowship 12E9223N.
+%
+
+\bibliography{refs}
+%
+\onecolumngrid
+\appendix
+%
+\end{document}

@@ -1,0 +1,3 @@
+\begin{tikzarray}[]{test}
+    \draw (0,0) circle (1cm);
+\end{tikzarray}

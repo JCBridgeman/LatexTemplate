@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if test -f "arXivSubmission.tar.gz"; then
+    rm arXivSubmission.tar.gz
+fi
+
+base=$(basename $PWD)
+cd ..
+COPYFILE_DISABLE=true tar --exclude="$base/sections/notes" --totals=USR1 --exclude=".*" --exclude="*.mx" --exclude="*.tar.gz" --exclude="response*.tex" --exclude="review*.pdf" --exclude="main*.pdf" --exclude="*.bib" --exclude="*.docx" --exclude="*.bst" --exclude-from=$base/.gitignore -czf arXivSubmission.tar.gz $base
+
+gunzip arXivSubmission.tar.gz
+tar rf arXivSubmission.tar $base/*.bbl
+gzip arXivSubmission.tar
+
+mv arXivSubmission.tar.gz $base
+
+cd $base

@@ -1,0 +1,161 @@
+% This line sets the project root file.
+% !TEX root = ../../subsystemBeyondPauli.tex
+% !TeX spellcheck = en_US
+
+\section{Pauli subsystem codes}\label{app:pauliSubsystemCodes}
+
+For completeness, in this section we will review the definition of a Pauli subsystem code following \onlinecite{Poulin2005,Bombin2010a}.
+
+Setting notation:
+Let $G$ be a group.
+\begin{subalign}
+	\text{Center: }     &  & \cent{G}:=  & \set{g\in G}{ghg^{-1}=h,\,\forall h\in G},                            \\
+	%	\text{Centralizer: } &  & \centralizer{H}{G}:= & \set{g\in G}{ghg^{-1}=h,\,\forall h\in H},    \\
+	%	\text{Normalizer: }  &  & \normalizer{H}{G}:=  & \set{g\in G}{ghg^{-1}\in H,\,\forall h\in H}, \\
+	\text{Rank: }       &  & \rk{G}:=    & \text{size of minimal generating set},                                \\
+	\text{Order: }      &  & \order{G}:= & \text{number of elements of $G$},                                     \\
+	\text{Commutator: } &  & [g,h]:=     & ghg^{-1}h^{-1}                             & \text{for $g,\,h\in G$}.
+\end{subalign}
+
+We begin with an abstract definition of the Pauli group for $n$ qudits of dimension $q$.
+Later we will act on the vector space $(\mathbb{C}^{q})^{\otimes n}$ using the standard representation.
+
+\begin{definition}[Pauli group]
+	Let $n$ and $q$ be positive integers.
+	The \define{$(q,n)$-Pauli group} is defined by
+	\begin{align}
+		\Pauli{q}{n}:= &
+		\begin{cases}
+			\grouppresentation{\alpha_{q},X_1,\ldots,X_n,Z_1,\ldots,Z_n}{X_i^q=Z_i^q=\alpha_{q}^{2q}=\alpha_{q}^{2}\comm{X_i,Z_i}=1} & \text{$q$ even} \\
+			\grouppresentation{\alpha_{q},X_1,\ldots,X_n,Z_1,\ldots,X_n}{X_i^q=Z_i^q=\alpha_{q}^q=\alpha_{q}\comm{X_i,Z_i}=1}        & \text{$q$ odd.}
+		\end{cases}
+	\end{align}
+	The group has order and rank
+	\begin{subalign}
+		\order{\Pauli{q}{n}}= &
+		\begin{cases}
+			2q^{2n+1} & \text{$q$ even} \\
+			q^{2n+1}  & \text{$q$ odd},
+		\end{cases} \\
+		\rk{\Pauli{q}{n}} =   &
+		\begin{cases}
+			2n+1 & \text{$q$ even} \\
+			2n   & \text{$q$ odd}.
+		\end{cases}
+	\end{subalign}
+	Each element of $\Pauli{q}{n}$ can be expressed uniquely as
+	\begin{align}
+		g & =\alpha_{q}^{a}X_1^{x_1}X_2^{x_2}\ldots X_n^{x_n}Z_1^{z_1}Z_2^{z_2}\ldots Z_n^{z_n},\label{eqn:pauliGroupWord}
+	\end{align}
+	for some $0\leq x_i,z_i<q$, and
+	\begin{align}
+		0\leq a<\begin{cases}
+			        2q & \text{ $q$ even} \\
+			        q  & \text{ $q$ odd}.
+		        \end{cases}
+	\end{align}
+	The center of $\Pauli{q}{n}$ is
+	\begin{align}
+		\cent{\Pauli{q}{n}}= & \grouppresentation{\alpha_{q}}{}\cong
+		\begin{cases}
+			\ZZ{2q} & \text{$q$ even} \\
+			\ZZ{q}  & \text{$q$ odd.}
+		\end{cases}
+	\end{align}
+\end{definition}
+%
+\begin{definition}[Stabilizer group]
+	A \define{stabilizer group} is an abelian subgroup $\Stab\subgp\Pauli{q}{n}$ such that
+	\begin{align}
+		\Stab\cap\cent{\Pauli{}{}}= & \{1\}.
+	\end{align}
+	Following \onlinecite{Bombin2010a}, a stabilizer group can be specified by supplying a pair $(\phi, s)$, where $\phi$ is an automorphism of $\Pauli{q}{n}$, and $s\leq n$ is the rank of $\Stab$.
+	The $s$ generators of $\Stab$ are the images of $X_1,\ldots,X_s\in\Pauli{q}{n}$
+	\begin{align}
+		\Stab:= & \grouppresentation{\phi(X_1),\phi(X_2),\ldots,\phi(X_s)}{}.
+	\end{align}
+	The group has order and rank
+	\begin{subalign}
+		\order{\Stab}= & q^s, \\
+		\rk{\Stab} =   & s.
+	\end{subalign}
+	We remark that there is a large redundancy in this description, with many choices of $\phi$ leading to the same $\Stab$.
+\end{definition}
+%
+\begin{definition}[Gauge group]
+	A \define{gauge group} $\G\subgp\Pauli{q}{n}$ is specified by a triple $(\phi,s,r)$, where $\phi$ is an automorphism of $\Pauli{q}{n}$ and the non-negative $s$, $r$ obey $s+r\leq n$.
+	Provided with this data, the gauge group is defined as
+	\begin{subalign}
+		\G:= & \grouppresentation{\alpha_{q},\phi(X_1),\phi(X_2),\ldots,\phi(X_s),\phi(X_{s+1},\ldots,\phi(X_{s+r}),\phi(Z_{s+1}),\ldots,\phi(Z_{s+r})}{} \\
+		=    & \grouppresentation{\alpha_{q},\Stab,\phi(X_{s+1},\ldots,\phi(X_{s+r}),\phi(Z_{s+1}),\ldots,\phi(Z_{s+r})}{},
+	\end{subalign}
+	where $\Stab = \grouppresentation{\phi(X_1),\phi(X_2),\ldots,\phi(X_s)}{}$ is the stabilizer subgroup.
+
+	The group $\G$ has order and rank
+	\begin{subalign}
+		\order{\G}= &
+		\begin{cases}
+			2q^{s+2r+1} & \text{$q$ even} \\
+			q^{s+2r+1}  & \text{$q$ odd},
+		\end{cases} \\
+		\rk{\G} =   &
+		\begin{cases}
+			s+2r+1 & \text{$q$ even} \\
+			s+2r   & \text{$q$ odd}.
+		\end{cases}
+	\end{subalign}
+\end{definition}
+
+\begin{definition}[Bare logical group]
+	Given a gauge group $\G$ defined by the triple $(\phi,s,r)$, the \define{bare logical group} is
+	\begin{align}
+		\bareLog & = \grouppresentation{\alpha_{q},\phi(X_{s+r+1}),\phi(Z_{s+r+1}),\phi(X_{s+r+2}),\phi(Z_{s+r+2}),\ldots,\phi(X_{s+r+k}),\phi(Z_{s+r+k})}{},
+	\end{align}
+	where $s+r+k=n$.
+	The minimal length of a non-trivial (not only containing powers of $\alpha_{q}$) word $W$ in $\bareLog$ is the \define{bare distance} $\bareDistance$.
+	Equivalently, $W$ is non-trivial if $\phi^{-1}(W)$ contains at least one element of $\{X_{s+r+1},Z_{s+r+1},X_{s+r+2},Z_{s+r+2},\ldots,X_{s+r+k},Z_{s+r+k}\}$ when written in standard form \cref{eqn:pauliGroupWord}.
+\end{definition}
+
+\begin{definition}[Dressed logical group]
+	Given a gauge group $\G$ defined by the triple $(\phi,s,r)$, the dressed logical group is
+	\begin{align}
+		\dressedLog = \grouppresentation{\alpha_{q},\G,\phi(X_{s+r+1}),\phi(Z_{s+r+1}),\phi(X_{s+r+2}),\phi(Z_{s+r+2}),\ldots,\phi(X_{s+r+k}),\phi(Z_{s+r+k})}{}.
+	\end{align}
+	The minimal length of a non-trivial word in $\dressedLog$ is the \define{dressed distance} $\dressedDistance$.
+\end{definition}
+
+\begin{definition}[Pauli subsystem code]
+	Given a gauge group $\G$ acting on $n$ physical qudits by the standard representation, the stabilizer group partitions the Hilbert space into two subspaces
+	\begin{align}
+		(\mathbb{C}^q)^n\cong \C\oplus\C^{\perp},
+	\end{align}
+	where $\C$ is the subspace on which $\Stab$ acts as $+1$, with dimension $q^{n-s}$.
+	In a Pauli subsystem code, the code space $\C$ is further decomposed into
+	\begin{align}
+		\C\cong \mathcal{A}\otimes\mathcal{B},
+	\end{align}
+	where $\mathcal{A}$ is the logical subsystem, and $\mathcal{B}$ is called the gauge space.
+	The gauge group $\G$ acts trivially on the $q^k$-dimensional subsystem $\mathcal{A}$, while $\bareLog\cong\Pauli{q}{k}$ acts as the logical group on this system.
+	The remaining $q^r$-dimensional subsystem $\mathcal{B}$ has non-trivial $\G$ action.
+	%
+	Pragmatically, the gauge space is a `junk' space that can be used to bypass no-go theorems for pure stabilizer codes.
+	%
+	A Pauli subsystem code on $n$ physical qudits, each of dimension $q$, which encodes $k$ logical qudits with bare distance $\bareDistance$ and dressed distance $\dressedDistance$ has parameters
+	\begin{align}
+		\codeparameters{n,k,\bareDistance,\dressedDistance}{q}.
+	\end{align}
+	It is often convenient to express the various groups in terms of a generating set.
+	The number of encoded qudits $k$ can be calculated from the groups by
+	\begin{align}
+		k = & n-(s+r) \\
+		=   &
+		\begin{cases}
+			n-\frac{\rk{\G}+\rk{\S}-1}{2} & \text{$q$ even} \\
+			n-\frac{\rk{\G}+\rk{\S}}{2}   & \text{$q$ odd}.
+		\end{cases}
+	\end{align}
+
+	Typically, a Pauli subsystem code is specified by providing an (over-complete) generating set for the gauge group $\G$, usually omitting mention of $\alpha_{q}$.
+	The stabilizer subgroup then consists of the center of the group defined by the given generators, ignoring phases.
+	We follow this tradition in the main text.
+\end{definition}
