@@ -128,11 +128,9 @@
 	}
 
 	\DeclareBoolOption{trackchanges}
-	\define@key{JCB}{trackchanges}{
-		\setbool{JCB@trackchanges}{true}
-		\typeout{JCB: trackchanges mode}
-		\PassOptionsToPackage{draft}{changes}
-	}
+	% \define@key{JCB}{trackchanges}{
+		
+	% }
 	
 
 	\DeclareOptionX<Changes@added>{summary}{\def\Changes@added@summary{#1}}
@@ -145,6 +143,11 @@
 	\DeclareOptionX{defaultcolor}{\ifblank{#1}{}{\renewcommand{\Changes@optiondefaultcolor}{#1}}}
 
 	\ProcessOptionsX
+
+	\ifbool{JCB@trackchanges}{
+		\typeout{JCB: trackchanges mode}
+		\PassOptionsToPackage{draft}{changes}
+		}{}
 \makeatother
 %%
 
@@ -496,7 +499,7 @@
 \newtotcounter{JCB@Changes@total}
 
 \ifbool{JCB@trackchanges}{
-
+	\typeout{FOOBAR}
 	\NewCommandCopy{\@added}{\added}
 	\renewcommand{\added}[2][\@empty]{%
 	\ifmmode\@added[#1]{\ensuremath{#2}}\else\@added[#1]{#2}\fi
@@ -549,7 +552,6 @@
 
 
 \ifboolexpr{bool{JCB@refereeresponse} or bool{JCB@trackchanges}}{
-	\typeout{FOOBAR}
 	\def\changes@title@produce{%
 		\begingroup
 		\frontmatter@title@above
