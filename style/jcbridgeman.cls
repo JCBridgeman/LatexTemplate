@@ -304,29 +304,23 @@
 \usepackage[mathscr]{eucal}
 \newcommand{\graph}{\mathscr{G}}
 
-\newcommand{\vvec}[1]
-{
-	\operatorname{\bf Vec}
-	\ifstrequal{#1}{}
+\newcommand{\vvec}[2][]
+{\ensuremath{%
+	\operatorname{\bf Vec}^{#1}
+	\ifstrequal{#2}{}
 	{}
-	{\left(#1\right)}
-}
+	{\left(#2\right)}%
+}}
 
-\newcommand{\rrep}[1]
-{
-	\operatorname{\bf Rep}
-	\ifstrequal{#1}{}
+\newcommand{\rrep}[2][]
+{\ensuremath{%
+	\operatorname{\bf Rep}^{#1}
+	\ifstrequal{#2}{}
 	{}
-	{\left(#1\right)}
-}
+	{\left(#2\right)}%
+}}
 
-\newcommand{\vvectwist}[2]
-{
-	\operatorname{\bf Vec}^{#2}
-	\ifstrequal{#1}{}
-	{}
-	{\left(#1\right)}
-}
+\newcommand{\vvectwist}[2][]{\vvec[#1]{#2}}
 
 \let\originalleft\left
 \let\originalright\right
@@ -409,7 +403,7 @@
 \setboolean{remakeall}{false}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
-\usetikzlibrary{arrows,arrows.meta,decorations.pathmorphing,backgrounds,positioning,fit,calc,patterns,shapes,decorations.markings,shadings,snakes,perspective,fadings}
+\usetikzlibrary{arrows,arrows.meta,decorations.pathmorphing,backgrounds,positioning,fit,calc,patterns,shapes,decorations.markings,shadings,perspective,fadings}
 \usetikzlibrary{external}
 \tikzset{every picture/.style={line cap=butt,line join=round}}
 
