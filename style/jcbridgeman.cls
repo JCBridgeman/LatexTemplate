@@ -115,16 +115,25 @@
 \makeatletter
 	\newbool{JCB@refereeresponse}
 	\setbool{JCB@refereeresponse}{false}
-
 	\NewEnviron{response}{}
 
 	\DeclareStringOption[]{response}[]
 	\define@key{JCB}{response}{
 		\setbool{JCB@refereeresponse}{true}
+		\JCB@trackchangestrue
 		\typeout{JCB: response mode}
+		\typeout{JCB: trackchanges mode}
 		\PassOptionsToPackage{draft}{changes}
 		\def\responseloc{#1}
 	}
+
+	\DeclareBoolOption{trackchanges}
+	\define@key{JCB}{trackchanges}{
+		\setbool{JCB@trackchanges}{true}
+		\typeout{JCB: trackchanges mode}
+		\PassOptionsToPackage{draft}{changes}
+	}
+	
 
 	\DeclareOptionX<Changes@added>{summary}{\def\Changes@added@summary{#1}}
 	\presetkeys{Changes@added}{summary=\@empty}{}
@@ -486,7 +495,7 @@
 
 \newtotcounter{JCB@Changes@total}
 
-\ifbool{JCB@refereeresponse}{
+\ifbool{JCB@trackchanges}{
 
 	\NewCommandCopy{\@added}{\added}
 	\renewcommand{\added}[2][\@empty]{%
@@ -539,7 +548,8 @@
 	borderline west={2pt}{0pt}{@quote}}
 
 
-\ifbool{JCB@refereeresponse}{
+\ifboolexpr{bool{JCB@refereeresponse} or bool{JCB@trackchanges}}{
+	\typeout{FOOBAR}
 	\def\changes@title@produce{%
 		\begingroup
 		\frontmatter@title@above
@@ -557,7 +567,7 @@
 	}%
 
 	\def\frontmatter@title@produce{%
-		\include{\responseloc}
+	\ifbool{JCB@refereeresponse}{\ifthenelse{\equal{\responseloc}{}}{}{\include{\responseloc}}}
 		\begingroup
 		\frontmatter@title@above
 		\frontmatter@title@format
@@ -572,19 +582,6 @@
 		\frontmatter@title@below
 		\endgroup
 	}%
-
-	% \def\changes@author@produce@group{%
-	% 	\begingroup
-	% 	\let\@author@present\@author@present@group
-	% 	\frontmatter@authorformat
-	% 	\let\AU@temp\@empty
-	% 	\set@listcomma@list\AU@temp
-	% 	\let\AFG@opr \affils@present@group
-	% 	\@AFG@list
-	% 	\par
-	% 	\endgroup
-	% 	\frontmatter@authorbelow
-	% }%
 
 	\def\changes@author@present@script#1#2#3{%
 		\begingroup
@@ -672,7 +669,7 @@
 
 \makeatletter
 \renewrobustcmd{\Changes@output}[7]{%
-	\ifbool{JCB@refereeresponse}%
+	\ifboolexpr{bool{JCB@refereeresponse} or bool{JCB@trackchanges}}%
 	{%
 		\Changes@check@author{#2}%
 		\Changes@set@color{#2}%
