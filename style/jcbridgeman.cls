@@ -500,7 +500,6 @@
 \newtotcounter{JCB@Changes@total}
 
 \ifbool{JCB@trackchanges}{
-	\typeout{FOOBAR}
 	\NewCommandCopy{\@added}{\added}
 	\renewcommand{\added}[2][\@empty]{%
 	\ifmmode\@added[#1]{\ensuremath{#2}}\else\@added[#1]{#2}\fi
@@ -630,6 +629,29 @@
 				\changes@author@produce@nogroup
 			}%
 			\frontmatter@RRAPformat{%
+				\vspace{3mm}
+				\expandafter\produce@RRAP\expandafter{\@date}
+			}%
+			\par
+			\frontmatter@finalspace
+		\endgroup
+	}%
+
+	\def\changestitleblock@produce{%
+		\begingroup
+			\ltx@footnote@pop
+			\def\@mpfn{mpfootnote}%
+			\def\thempfn{\thempfootnote}%
+			\c@mpfootnote\z@
+			\let\@makefnmark\frontmatter@makefnmark
+			\frontmatter@setup
+			\changes@title@produce
+			\groupauthors@sw{%
+				\changes@author@produce@group
+			}{
+				\changes@author@produce@nogroup
+			}%
+			\frontmatter@RRAPformat{%
 				\expandafter\produce@RRAP\expandafter{\@date}
 			}%
 			\par
@@ -647,17 +669,19 @@
 		\thispagestyle{empty}
 		\pagenumbering{roman}
 		\changesmaketitle
+		\onecolumngrid
 		\vspace{-5mm}
 		%
 		\noindent\hspace*{\fill}\rule{.75\textwidth}{.5pt}\hspace*{\fill}\\
 
 		\vspace*{5mm}
 	}{%
-	\newpage\newpage
-	\ifnumgreater{\totvalue{JCB@Changes@total}}{0}{\listofchanges}{\typeout{No changes to list}}
-	\newpage\newpage
-	\pagenumbering{arabic}
-	\setcounter{page}{1}
+		\newpage\newpage
+		\ifnumgreater{\totvalue{JCB@Changes@total}}{0}{\listofchanges}{\typeout{No changes to list}}
+		\newpage\newpage
+		\pagenumbering{arabic}
+		\setcounter{page}{1}
+		% \twocolumn@sw{}{}
 	}
 
 	\newcommand{\nicerule}{%
