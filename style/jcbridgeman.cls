@@ -159,7 +159,10 @@
 \ProcessOptions\relax
 \ProcessKeyvalOptions*
 
+\let\orilabel\label
 \LoadClass[aps,notitlepage,longbibliography,superscriptaddress,footinbib]{revtex4-2}
+\let\label\orilabel
+
 \RequirePackage{amsmath,amsfonts,amssymb,amsthm,bm,bbm,stmaryrd}
 \RequirePackage{graphicx,tikz,pgfplots,tikz-3dplot}
 \RequirePackage{environ,xstring}
@@ -513,6 +516,7 @@
 	\else%
 	\@deleted[#1]{#2}%
 	\fi%
+	\stepcounter{JCB@Changes@total}
 	}
 
 	\NewCommandCopy{\@replaced}{\replaced}
@@ -522,6 +526,7 @@
 	\else%
 	\@replaced[#1]{#2}{#3}%
 	\fi%
+	\stepcounter{JCB@Changes@total}
 	}
 }{
 	\renewcommand{\added}[2][\@empty]{#2}
@@ -677,11 +682,11 @@
 		\vspace*{5mm}
 	}{%
 		\newpage\newpage
+		\typeout{\totvalue{JCB@Changes@total}}
 		\ifnumgreater{\totvalue{JCB@Changes@total}}{0}{\listofchanges}{\typeout{No changes to list}}
 		\newpage\newpage
 		\pagenumbering{arabic}
 		\setcounter{page}{1}
-		% \twocolumn@sw{}{}
 	}
 
 	\newcommand{\nicerule}{%
