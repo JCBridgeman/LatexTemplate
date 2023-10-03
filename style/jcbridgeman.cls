@@ -125,6 +125,7 @@
 		\typeout{JCB: trackchanges mode}
 		\PassOptionsToPackage{draft}{changes}
 		\def\responseloc{#1}
+		\typeout{JCB: #1}
 	}
 
 	\DeclareBoolOption{trackchanges}
@@ -358,8 +359,8 @@
 	\right|
 }
 
-\newcommand{\subgp}{\leq}
-\newcommand{\normalsubgp}{\trianglelefteq}
+\newcommand{\subgp}{\leqslant}
+\newcommand{\normalsubgp}{\trianglelefteqslant}
 
 \newcommand{\cent}[1]
 {\ensuremath{
@@ -422,7 +423,7 @@
 \ifthenelse{\not\equal{\tikzexternalcheckshellescape}{}\and\boolean{allowexternal}}{
 	\tikzexternalize[prefix=figures/]
 	\tikzset{external/system call={
-				pdflatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource";rm  -f "\image".log ; rm -f "\image".dpth ; rm  -f "\image"Notes.bib; rm  -f "\image".md5;
+				pdflatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource";rm  -f "\image".log ; rm -f "\image".dpth ; rm  -f "\image"Notes.bib; rm  -f "\image".md5; rm  -f "\image".soc;
 			}}
 }{
 }
@@ -455,7 +456,7 @@
 
 \NewEnviron{tikzarray}[2][scale=1]{
 	\ensuremath{
-		\begin{array}{c}\typeout{XYZ}
+		\begin{array}{c}
 			\IfSubStr{#2}{:}
 			{
 				\StrBehind{#2}{:}[\filename]
@@ -569,8 +570,8 @@
 	}%
 
 	\def\frontmatter@title@produce{%
-	\ifbool{JCB@refereeresponse}{\ifthenelse{\equal{\responseloc}{}}{}{\include{\responseloc}}}
 		\begingroup
+	\ifbool{JCB@refereeresponse}{\ifthenelse{\equal{\responseloc}{}}{}{\include{\responseloc}}}
 		\frontmatter@title@above
 		\frontmatter@title@format
 		Changes:
@@ -616,24 +617,23 @@
 	
 	\def\responsetitleblock@produce{%
 		\begingroup
-		\ltx@footnote@pop
-		\def\@mpfn{mpfootnote}%
-		\def\thempfn{\thempfootnote}%
-		\c@mpfootnote\z@
-		\let\@makefnmark\frontmatter@makefnmark
-		\frontmatter@setup
-		\changes@title@produce
-		\groupauthors@sw{%
-			\changes@author@produce@group
-		}{
-			\changes@author@produce@nogroup
-		}%
-		\frontmatter@RRAPformat{%
-			\expandafter\produce@RRAP\expandafter{\@date}
-		}%
-		\par
-		\frontmatter@finalspace
-		
+			\ltx@footnote@pop
+			\def\@mpfn{mpfootnote}%
+			\def\thempfn{\thempfootnote}%
+			\c@mpfootnote\z@
+			\let\@makefnmark\frontmatter@makefnmark
+			\frontmatter@setup
+			\changes@title@produce
+			\groupauthors@sw{%
+				\changes@author@produce@group
+			}{
+				\changes@author@produce@nogroup
+			}%
+			\frontmatter@RRAPformat{%
+				\expandafter\produce@RRAP\expandafter{\@date}
+			}%
+			\par
+			\frontmatter@finalspace
 		\endgroup
 	}%
 	
