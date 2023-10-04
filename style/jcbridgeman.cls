@@ -550,9 +550,12 @@
 \tcbset{shield externalize}
 \definecolor{@quote}{RGB}{30,100,200}
 
-\newenvironment{quote_report}{\begin{quote}}{\end{quote}}
+\newenvironment{quote_report}[1][]
+	{\begin{quote}\ifstrempty{#1}{}{#1:\\}}
+	{\end{quote}}
+
 \tcolorboxenvironment{quote_report}{blanker,
-	before skip=6pt,after skip=6pt,left skip=3em,
+	before skip=6pt,after skip=16pt,left skip=3em,
 	borderline west={2pt}{0pt}{@quote}}
 
 
