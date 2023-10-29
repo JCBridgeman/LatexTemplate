@@ -785,7 +785,8 @@
 		\IfIsEmpty{#2}%
 		{\def\Changes@locid{}}%
 		{\def\Changes@locid{~(#2)}}%
-		\phantomsection\addcontentsline{\Changes@locextension}{#1}{#6\Changes@locid: \@out}%
+		\def\preText{\makebox[\widthof{Replaced }][l]{#6}}%
+		\phantomsection\addcontentsline{\Changes@locextension}{#1}{\preText\Changes@locid: \@out}%
 	}%
 	{%
 		\IfIsEmpty{#3}%
