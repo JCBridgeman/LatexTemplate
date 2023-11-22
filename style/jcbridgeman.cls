@@ -172,7 +172,7 @@
 \RequirePackage{adjustbox,soul,diagbox,cancel,hhline}
 \RequirePackage{changes}
 \RequirePackage{outlines,changepage,ftnxtra}
-\RequirePackage{geometry}
+\RequirePackage{geometry,xparse}
 
 % Some tweaks to revtex
 \makeatletter
@@ -419,7 +419,7 @@
 \setboolean{remakeall}{false}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
-\usetikzlibrary{arrows,arrows.meta,decorations.pathmorphing,backgrounds,positioning,fit,calc,patterns,shapes,decorations.markings,shadings,perspective,fadings}
+\usetikzlibrary{arrows,arrows.meta,decorations.pathmorphing,backgrounds,positioning,fit,calc,patterns,shapes,decorations.markings,shadings,perspective,fadings,quantikz2}
 \usetikzlibrary{external}
 \tikzset{every picture/.style={line cap=butt,line join=round}}
 
@@ -433,7 +433,6 @@
 
 \newcommand{\includeTikz}[2]
 {
-    
 	\tikzifexternalizing
 	{
 		\includeTikzrm{#1}{#2}
@@ -483,6 +482,29 @@
 		}
 	\end{array}
 }
+
+\makeatletter
+
+\let\JB@quantikz\quantikz
+\let\JB@endquantikz\endquantikz
+
+\DeclareDocumentEnvironment{quantikzarray}{O{} m +b}{%
+\ensuremath{
+	\begin{array}{c}
+		\IfSubStr{#2}{:}
+		{
+			\StrBehind{#2}{:}[\filename]
+			\tikzset{external/remake next}
+			\tikzsetnextfilename{\filename}
+			\includeTikzrm{\filename}{\JB@quantikz[#1]#3\JB@endquantikz}
+		}
+		{
+			\includeTikz{#2}{\JB@quantikz[#1]#3\JB@endquantikz}
+		}
+\end{array}}}{}
+
+
+\makeatother
 
 \newcommand{\ifequals}[3]{\ifthenelse{\equal{#1}{#2}}{#3}{}}
 \newcommand{\swcase}[2]{#1 #2} % Dummy, so \renewcommand has something to overwrite...
@@ -794,4 +816,22 @@
 		{#3}%
 	}%
 }
+\makeatother
+
+\makeatletter
+
+\newif\ifoverleaf
+\overleaffalse
+\def\@overleafhome{/tmp}
+
+\begingroup\endlinechar=-1\relax
+\everyeof{\noexpand}%
+\edef\x{\endgroup\def\noexpand\@homepath{\@@input|"kpsewhich --var-value=HOME" }}\x
+
+\ifx\@homepath\@overleafhome
+\typeout{On overleaf}
+\overleaftrue
+\setboolean{allowexternal}{false}
+\fi
+	
 \makeatother
