@@ -253,14 +253,14 @@
 }
 
 \RequirePackage[pdfpagelabels,pdftex,bookmarks,breaklinks]{hyperref}
-\definecolor{UGentBlue}{RGB}{30,100,200}
+\definecolor{nightBlue}{RGB}{27,81,166}
 
 \hypersetup{
 	colorlinks,
-	linkcolor=UGentBlue,
-	citecolor=UGentBlue,
+	linkcolor=nightBlue,
+	citecolor=nightBlue,
 	filecolor=red,
-	urlcolor=UGentBlue,
+	urlcolor=nightBlue,
 	pdftitle={\@pdftitle},
 	pdfauthor={\@pdfauthor},
     pdfcreator={LaTeX with extended hyperref}
