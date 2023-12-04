@@ -205,6 +205,8 @@
 	\ifnumgreater{\@citelistlen}{1}{Refs}{Ref}.~[\oldonlinecite{#1}]%
 	}
 
+
+
 \AtAppendix{
 	\let\oldsection\section
 	\renewcommand{\section}[1]{
@@ -267,6 +269,7 @@
 }
 
 \RequirePackage[capitalise]{cleveref}
+\RequirePackage[]{footmisc}
 
 \makeatother
 
@@ -401,6 +404,8 @@
 	\left\llbracket#1\right\rrbracket_{#2}
 }
 
+\newcommand{\isoto}{\ensuremath{\xrightarrow{\sim}}}
+
 \newenvironment{subalign}[1][]{\subequations\label{#1}\align}{\endalign\endsubequations}
 
 \newcommand{\define}[1]{\emph{#1}}
@@ -431,77 +436,60 @@
 }{
 }
 
-\newcommand{\includeTikz}[2]
-{
-	\tikzifexternalizing
-	{
-		\includeTikzrm{#1}{#2}
-	}
-	{
-		\IfFileExists{figures/#1.pdf}
-		{
-			\ifthenelse{\boolean{remakeall}}
-			{\includeTikzrm{#1}{#2}}
-			{\includegraphics{figures/#1}}
-		}
-		{
-			\includeTikzrm{#1}{#2}
-		}
-	}
-}
+\makeatletter
 
-\newcommand{\includeTikzrm}[2]{
+\DeclareDocumentCommand{\@includeTikzrm}{m +m}{
 	\tikzset{external/remake next}
 	\tikzsetnextfilename{#1}
 	#2
 }
 
-\NewEnviron{tikzarray}[2][scale=1]{
-	\ensuremath{
-		\begin{array}{c}
-			\IfSubStr{#2}{:}
-			{
-				\StrBehind{#2}{:}[\filename]
-				\includeTikzrm{\filename}{\begin{tikzpicture}[#1]\BODY;\end{tikzpicture}}
-			}
-			{
-				\includeTikz{#2}{\begin{tikzpicture}[#1]\BODY;\end{tikzpicture}}
-			}
-		\end{array}}
-}
-
-\NewEnviron{tikzarrayrm}[2][scale=1]{
-	\begin{array}{c}
-		\IfSubStr{#2}{:}
+\DeclareDocumentCommand{\@includeTikz}{m +m}{
+	\tikzifexternalizing
+	{
+		\@includeTikzrm{#1}{#2}
+	}
+	{
+		\IfFileExists{figures/#1.pdf}
 		{
-			\StrBehind{#2}{:}[\filename]
-			\includeTikzrm{\filename}{\begin{tikzpicture}[#1]\BODY;\end{tikzpicture}}
+			\ifthenelse{\boolean{remakeall}}
+			{\@includeTikzrm{#1}{#2}}
+			{\includegraphics{figures/#1}}
 		}
 		{
-			\includeTikzrm{#2}{\begin{tikzpicture}[#1]\BODY;\end{tikzpicture}}
+			\@includeTikzrm{#1}{#2}
+		}
+	}
+}
+
+\DeclareDocumentEnvironment{@tikzenvironment}{m O{} m +b}{%
+\ensuremath{
+	\begin{array}{c}
+		\IfSubStr{#3}{:}{%
+			\StrBehind{#3}{:}[\filename]%
+			\@includeTikzrm{\filename}{\begin{#1}[#2]#4\end{#1}}%
+		}{
+			\@includeTikz{#3}{\begin{#1}[#2]#4\end{#1}}%
 		}
 	\end{array}
 }
+}
 
-\makeatletter
+\DeclareDocumentEnvironment{tikzarray}{O{} m +b}{\begin{@tikzenvironment}{tikzpicture}[#1]{#2}#3\end{@tikzenvironment}}{}
+\DeclareDocumentEnvironment{quantikzarray}{O{} m +b}{\begin{@tikzenvironment}{quantikz}[#1]{#2}#3\end{@tikzenvironment}}{}
 
-\let\JB@quantikz\quantikz
-\let\JB@endquantikz\endquantikz
-
-\DeclareDocumentEnvironment{quantikzarray}{O{} m +b}{%
-\ensuremath{
-	\begin{array}{c}
-		\IfSubStr{#2}{:}
-		{
-			\StrBehind{#2}{:}[\filename]
-			\tikzset{external/remake next}
-			\tikzsetnextfilename{\filename}
-			\includeTikzrm{\filename}{\JB@quantikz[#1]#3\JB@endquantikz}
-		}
-		{
-			\includeTikz{#2}{\JB@quantikz[#1]#3\JB@endquantikz}
-		}
-\end{array}}}{}
+% \DeclareDocumentEnvironment{quantikzarray}{O{} m +b}{%
+% \ensuremath{
+% 	\begin{array}{c}
+% 		\IfSubStr{#2}{:}%
+% 		{%
+% 			\StrBehind{#2}{:}[\filename]%
+% 			\@includeTikzrm{\filename}{\begin{quantikz}[#1]#3;\end{quantikz}}%
+% 		}{%
+% 		\@includeTikz{#2}{\begin{quantikz}[#1]#3\end{quantikz}}%
+% 		}
+% 	\end{array}
+% }}{}
 
 
 \makeatother
@@ -541,14 +529,14 @@
 	\stepcounter{JCB@Changes@total}
 	}
 
-	\NewCommandCopy{\@replaced}{\replaced}
+	\NewCommandCopy{\@replaced}{\replaced}%
 	\renewcommand{\replaced}[3][\@empty]{%
 	\ifmmode%
 	\@replaced[#1]{\ensuremath{#2}}{\ensuremath{#3}}%
 	\else%
 	\@replaced[#1]{#2}{#3}%
 	\fi%
-	\stepcounter{JCB@Changes@total}
+	\stepcounter{JCB@Changes@total}%
 	}
 }{
 	\renewcommand{\added}[2][\@empty]{#2}
@@ -695,7 +683,32 @@
 		\suppressfloats[t]
 	}
 
+	\let\maincite\cite
+	\let\@@mainonlinecite\onlinecite
+
+	\RequirePackage[resetlabels,labeled]{multibib}
+	\newcites{R}{Response}
+
+	\def\citeR#1{%
+	\renewcommand{\citenumfont}[1]{R##1}%
+	\let\@citex\mb@@citex%
+	\let\@newciteauxhandle\@auxoutR%
+	\maincite{#1}%
+	\renewcommand{\citenumfont}[1]{##1}%
+	}
+
+	\def\onlineciteR#1{%
+	\renewcommand{\citenumfont}[1]{R##1}%
+	\let\@citex\mb@@citex%
+	\let\@newciteauxhandle\@auxoutR%
+	\@@mainonlinecite{#1}%
+	\renewcommand{\citenumfont}[1]{##1}%
+	}
+
 	\renewenvironment{response}{%
+		\let\cite\citeR
+		\let\onlinecite\onlineciteR
+
 		\thispagestyle{empty}
 		\pagenumbering{roman}
 		\changesmaketitle
@@ -703,15 +716,18 @@
 		\vspace{-5mm}
 		%
 		\noindent\hspace*{\fill}\rule{.75\textwidth}{.5pt}\hspace*{\fill}\\
-
 		\vspace*{5mm}
 	}{%
+		\bibliographystyleR{apsrev_jacob}
+		\bibliographyR{refs_response}
 		\newpage\newpage
 		\typeout{\totvalue{JCB@Changes@total}}
 		\ifnumgreater{\totvalue{JCB@Changes@total}}{0}{\listofchanges}{\typeout{No changes to list}}
 		\newpage\newpage
 		\pagenumbering{arabic}
 		\setcounter{page}{1}
+		\let\cite\maincite
+		\let\onlinecite\@@mainonlinecite
 	}
 
 	\newcommand{\nicerule}{%
